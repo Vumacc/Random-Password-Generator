@@ -1,21 +1,38 @@
 import random
 import string
 
-# Define the character sets for letters and numbers
-letters = string.ascii_lowercase
-numbers = string.digits
+def generate_password(length, use_letters=True, use_numbers=True, use_special_chars=False):
+    characters = ""
+    if use_letters:
+        characters += string.ascii_letters
+    if use_numbers:
+        characters += string.digits
+    if use_special_chars:
+        characters += string.punctuation
 
-# Change the numbers to get more or less letters/numbers in the password
-random_letters = [random.choice(letters) for _ in range (5)]
-random_numbers = [random.choice(numbers) for _ in range(5)]
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
 
-# Combines the letters and numbers into a single line
-random_characters = random_letters + random_numbers
+def get_user_preferences():
+    while True:
+        try:
+            length = int(input("Enter password length: "))
+            if length <= 0:
+                print("Password length must be greater than 0.")
+                continue
+            break
+        except ValueError:
+            print("Invalid input. Please enter a valid integer for password length.")
 
-# Shuffles the characters to make it more random
-random.shuffle(random_characters)
+    use_letters = input("Include letters? (y/n): ").lower() == 'y'
+    use_numbers = input("Include numbers? (y/n): ").lower() == 'y'
+    use_special_chars = input("Include special characters? (y/n): ").lower() == 'y'
+    return length, use_letters, use_numbers, use_special_chars
 
-# Convert the list of characters into a string
-password = ''.join(random_characters)
+def main():
+    length, use_letters, use_numbers, use_special_chars = get_user_preferences()
+    password = generate_password(length, use_letters, use_numbers, use_special_chars)
+    print("Your generated password is:", password)
 
-print(password)
+if __name__ == "__main__":
+    main()
